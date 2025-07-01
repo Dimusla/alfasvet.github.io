@@ -45,4 +45,48 @@ sendBtn.addEventListener('click', async () => {
     
     // Добавляем сообщение пользователя
     const userMessageElement = document.createElement('div');
-    userMessageElement.classList.add('
+    userMessageElement.classList.add('// Продолжение main.js
+
+// Функция получения токена (безопасное решение)
+function getApiToken() {
+    // В продакшене токен должен храниться на сервере
+    // Здесь пример для демонстрации
+    return localStorage.getItem('apiToken') || '';
+}
+
+// Обработчик отправки
+sendBtn.addEventListener('click', async () => {
+    const userMessage = userInput.value.trim();
+    
+    if (!userMessage) return;
+    
+    // Добавляем сообщение пользователя
+    const userMessageElement = document.createElement('div');
+    userMessageElement.classList.add('user-message');
+    userMessageElement.textContent = userMessage;
+    messagesContainer.appendChild(userMessageElement);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    
+    try {
+        const botResponse = await sendMessage(userMessage);
+        const botMessageElement = document.createElement('div');
+        botMessageElement.classList.add('bot-message');
+        botMessageElement.textContent = botResponse;
+        messagesContainer.appendChild(botMessageElement);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    } catch (error) {
+        const errorElement = document.createElement('div');
+        errorElement.classList.add('error-message');
+        errorElement.textContent = 'Произошла ошибка при получении ответа';
+        messagesContainer.appendChild(errorElement);
+    }
+    
+    userInput.value = '';
+});
+
+// Инициализация (если нужно сохранить токен)
+if (!localStorage.getItem('apiToken')) {
+    // Здесь должен быть код получения токена через безопасный канал
+    // Например, через прокси-сервер
+}
+
