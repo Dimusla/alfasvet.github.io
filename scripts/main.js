@@ -9,7 +9,7 @@ async function sendMessage(text) {
         const response = await fetch('https://gigachat.api.sbercloud.ru/v1/chat/completions', {
             method: 'POST',
             headers: {
-                'Authorization': 'Bearer ВАШ_ТОКЕН',
+                'Authorization': `Bearer ${getApiToken()}`,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
@@ -30,6 +30,13 @@ async function sendMessage(text) {
     }
 }
 
+// Функция получения токена (пример реализации)
+function getApiToken() {
+    // Здесь должна быть логика получения токена
+    // Например, из локального хранилища или через прокси
+    return localStorage.getItem('apiToken') || '';
+}
+
 // Обработчик отправки
 sendBtn.addEventListener('click', async () => {
     const userMessage = userInput.value.trim();
@@ -38,24 +45,4 @@ sendBtn.addEventListener('click', async () => {
     
     // Добавляем сообщение пользователя
     const userMessageElement = document.createElement('div');
-    userMessageElement.classList.add('user-message');
-    userMessageElement.textContent = userMessage;
-    messagesContainer.appendChild(userMessageElement);
-    messagesContainer.scrollTop = messagesContainer.scrollHeight;
-    
-    try {
-        const botResponse = await sendMessage(userMessage);
-        const botMessageElement = document.createElement('div');
-        botMessageElement.classList.add('bot-message');
-        botMessageElement.textContent = botResponse;
-        messagesContainer.appendChild(botMessageElement);
-        messagesContainer.scrollTop = messagesContainer.scrollHeight;
-    } catch (error) {
-        const errorElement = document.createElement('div');
-        errorElement.classList.add('error-message');
-        errorElement.textContent = 'Произошла ошибка при получении ответа';
-        messagesContainer.appendChild(errorElement);
-    }
-    
-    userInput.value = '';
-});
+    userMessageElement.classList.add('
