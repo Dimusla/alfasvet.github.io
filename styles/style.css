@@ -1,62 +1,50 @@
-// Получаем элементы DOM
-const messagesContainer = document.getElementById('messages');
-const userInput = document.getElementById('user-input');
-const sendBtn = document.getElementById('send-btn');
-
-// Функция отправки сообщения
-async function sendMessage(text) {
-    try {
-        const response = await fetch('https://gigachat.api.sbercloud.ru/v1/chat/completions', {
-            method: 'POST',
-            headers: {
-                'Authorization': 'Bearer ВАШ_ТОКЕН',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                messages: [
-                    {
-                        role: 'user',
-                        content: text
-                    }
-                ]
-            })
-        });
-        
-        const data = await response.json();
-        return data.choices[0].message.content;
-    } catch (error) {
-        console.error('Ошибка:', error);
-        return 'Произошла ошибка';
-    }
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f5f5f5;
 }
 
-// Обработчик отправки
-sendBtn.addEventListener('click', async () => {
-    const userMessage = userInput.value.trim();
-    
-    if (!userMessage) return;
-    
-    // Добавляем сообщение пользователя
-    const userMessageElement = document.createElement('div');
-    userMessageElement.classList.add('user-message');
-    userMessageElement.textContent = userMessage;
-    messagesContainer.appendChild(userMessageElement);
-    messagesContainer.scrollTop = messagesContainer.scrollHeight;
-    
-    try {
-        const botResponse = await sendMessage(userMessage);
-        const botMessageElement = document.createElement('div');
-        botMessageElement.classList.add('bot-message');
-        botMessageElement.textContent = botResponse;
-        messagesContainer.appendChild(botMessageElement);
-        messagesContainer.scrollTop = messagesContainer.scrollHeight;
-    } catch (error) {
-        const errorElement = document.createElement('div');
-        errorElement.classList.add('error-message');
-        errorElement.textContent = 'Произошла ошибка при получении ответа';
-        messagesContainer.appendChild(errorElement);
-    }
-    
-    userInput.value = '';
-});
+#chat {
+    width: 300px;
+    margin: 20px auto;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
 
+#messages {
+    padding: 15px;
+    max-height: 300px;
+    overflow-y: auto;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+}
+
+#input-container {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: white;
+    border-top: 1px solid #ddd;
+}
+
+input[type="text"] {
+    width: calc(100% - 50px);
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button {
+    padding: 10px 15px;
+    margin-left: 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
